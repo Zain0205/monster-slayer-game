@@ -10,7 +10,8 @@
         monsterHealth: 100,
         round: 0,
         winner: null,
-        surender: false
+        surender: false,
+        logMessage: [],
       }
     },
     watch: {
@@ -61,26 +62,30 @@
     },
     methods: {
       startGame(){
-        this.monsterHealth = 100
-        this.playerHealth = 100
-        this.round = 0
-        this.winner = null
-        this.surender = false
+        this.monsterHealth = 100;
+        this.playerHealth = 100;
+        this.round = 0;
+        this.winner = null;
+        this.surender = false;
+        this.logMessage = [];
       },
       playerAtt(){
         this.round++
         const rNum = randomNumber(5, 12)
         this.monsterHealth -= rNum
+        this.addLog('Player', 'Attack', rNum)
         this.monsterAtt()
       },
       monsterAtt(){
         const rNum = randomNumber(8, 16)
         this.playerHealth -= rNum
+        this.addLog('Monster', 'Attack', rNum)
       },
       specialAtt(){
         this.round++
         const rNum = randomNumber(10, 25)
         this.monsterHealth -= rNum
+        this.addLog('Player', 'Special Attack', rNum)
         this.monsterAtt()
       },
       playerHeal(){
@@ -91,13 +96,23 @@
         } else {
           this.playerHealth += heal
         }
+
+        this.addLog('player', 'heal', heal)
+
         this.monsterAtt()
       },
       surenderBtn(){
         this.winner = "Monster"
         this.surender = !this.surender
+      },
+      addLog(who, what, value){
+        this.logMessage.unshift({
+          action: who,
+          type: what,
+          value: value
+        })
       }
-    }
+    },
   }
 </script>
 
@@ -131,9 +146,15 @@
     <button @click="playerHeal" :disabled="useHeal">Heal</button>
     <button @click="surenderBtn">Surender</button>
   </section>
+
+  <section class="container" id="log">
+    <h2>Battle Log</h2>
+    
+    <p v-for="log in logMessage" > {{ log.action }} - {{ log.type }} {{ log.value }} </p>
+  </section>
 </template>
 
-<style scoped>
+<style>
 section {
   width: 90%;
   max-width: 40rem;

@@ -1,6 +1,7 @@
-<script setup>
-  import Status from './components/Status.vue'
-</script>
+<script>
+
+
+  </script>
 
 <template>
   <header>
@@ -8,8 +9,8 @@
   </header>
 
   <Status />
-  
 
+  
   
 </template>
 
